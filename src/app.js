@@ -4,8 +4,10 @@ import mongoose from 'mongoose';
 import 'dotenv/config';
 
 const app=express();
-app.use(express.json());
-app.use(cors());
-mongoose.connect(process.env.DEV_DATABASE);
+app.use(cors({origin:'*',methods:['GET','POST','DELETE','UPDATE','PUT','PATCH']}));
+mongoose.connect(process.env.DEV_DATABASE,{ useNewUrlParser: true })
+  .then(() => {
+    app.use(express.json());
+  });	
 
 export default app;
