@@ -2,7 +2,7 @@ import User from "../models/user";
 import { registerUser } from "../service/user.service";
 import { BcryptUtil } from "../utils/bcrypt";
 import { generateToken } from "../utils/generateToken";
-import passport from "passport";
+
 
 export const createUser=async(req,res)=>{
     try{

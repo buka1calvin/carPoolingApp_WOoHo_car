@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import passportLocalMongoose from 'passport-local-mongoose';
  
 const userSchema=new mongoose.Schema({
+  
      firstname: {
         type: String,
         required: true
@@ -44,6 +45,14 @@ const userSchema=new mongoose.Schema({
       },
       bio: {
         type: String
+      },
+      isEmailVerified: {
+        type:Boolean,
+        default:false
+      },
+      provider: {
+        type: String,
+        default: ''
       },
       rating: {
         type: Number,

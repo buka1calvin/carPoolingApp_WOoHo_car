@@ -14,26 +14,30 @@ const app=express();
 app.use(express.json())
 app.use(morgan('dev'));
 app.use(bodyParser.json())
-app.use(session({
-  secret: 'bukaG',
-  resave: false,
-  saveUninitialized: false
-}));
+
 app.use(cors({origin:'*',methods:['GET','POST','DELETE','UPDATE','PUT','PATCH']}));
 mongoose.connect(process.env.DEV_DATABASE,{ useNewUrlParser: true })
   .then(() => {
     app.use(express.json());
   });	
+  
+  app.use(session({
+    secret: 'bukaG',
+    resave: false,
+    saveUninitialized: false,
+    cookie:{secure:true}
+  }));
+  // const LocalStrategy = PassportLocal.Strategy;
+  // passport.use(new LocalStrategy(User.authenticate()));
+  // passport.serializeUser(User.serializeUser());
+  // passport.deserializeUser(User.deserializeUser());
+
+  app.use(passport.initialize())
+  app.use(passport.session())
   try {
     app.use('/api/v1', allRoutes);
   } catch (error) {
     console.log(error);
   }
-  const LocalStrategy = PassportLocal.Strategy;
-  passport.use(new LocalStrategy(User.authenticate()));
-  passport.serializeUser(User.serializeUser());
-  passport.deserializeUser(User.deserializeUser());
 
-  app.use(passport.initialize())
-  app.use(passport.session())
 export default app;

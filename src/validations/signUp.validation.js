@@ -1,6 +1,5 @@
 import Joi from 'joi';
 import PasswordComplexity from 'joi-password-complexity';
-import JoiPhoneNumber from 'joi-phone-number';
 
 const validateForm = (schema) => (payload) => schema.validate(payload, { abortEarly: false });
 
@@ -14,7 +13,7 @@ const signUpSchema = Joi.object({
     lowerCase: 1,
     numeric: 1,
   }).required(),
-  phoneNumber: Joi.string().regex(/^(\+250)?[0-9]{9}$/).required().messages({
+  phoneNumber: Joi.string().regex(/^(\+250)?[0-9]{9}$/).messages({
     'string.pattern.base': 'Phone number must be a valid Rwandan phone number.',
   }),
 });
@@ -30,3 +29,4 @@ export const signupValidation = (req, res, next) => {
       next();
     }
   };
+  
