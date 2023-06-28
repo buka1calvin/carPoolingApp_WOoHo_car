@@ -57,8 +57,10 @@ const userSchema=new mongoose.Schema({
       },
       userID:{
         type:String
-      }
-})
+      },
+},
+{ timestamps: true }
+)
 userSchema.plugin(passportLocalMongoose)
 const User=mongoose.model('User',userSchema)
 
