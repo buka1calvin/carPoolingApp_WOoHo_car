@@ -2,7 +2,9 @@ import User from "../models/user";
 import { registerUser } from "../service/user.service";
 import { BcryptUtil } from "../utils/bcrypt";
 import { generateToken } from "../utils/generateToken";
-import passport from "passport";
+import generateOTP from "../utils/generateOTP";
+import OTP from "../models/Otp";
+import validationOTPmail from "../service/emailValidation.service";
 
 export const createUser=async(req,res)=>{
     try{
@@ -47,7 +49,36 @@ export const loginUser=async(req,res,next)=>{
                 isactive:foundUser.isActive
             }
             const token=generateToken(userToken)
-            if(foundUser.role==='passenger'||foundUser.role==="admin"){
+            const otp=generateOTP();
+
+            if(foundUser.role==='driver' || foundUser.role==='passenger'){
+                try{
+
+                    const newOTP = new OTP({
+                        otp,
+                        email: foundUser.email,
+                      });
+                      await newOTP.save();
+                      await validationOTPmail(foundUser, otp, token);
+                      res.status(200).json({
+                        message:"user logged in successfully!",
+                        user:{
+                            id:foundUser.id,
+                            firstname:foundUser.firstname,
+                            email:foundUser.email,
+                            role:foundUser.role,
+                            isactive:foundUser.isActive
+                        },
+                        token:token,
+                    })
+                      
+
+            }
+            catch(error){
+                console.log(error.message)
+            }
+            }
+            if(foundUser.role==="admin"){
                 res.status(200).json({
                     message:"user logged in successfully!",
                     user:{
@@ -57,7 +88,7 @@ export const loginUser=async(req,res,next)=>{
                         role:foundUser.role,
                         isactive:foundUser.isActive
                     },
-                    token:token
+                    token:token,
                 })
             }
           }
