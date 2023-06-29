@@ -1,6 +1,7 @@
 const LocalStrategy = require('passport-local').Strategy;
 const { BcryptUtil } = require("../utils/bcrypt");
 import User from '../models/user';
+import passport from 'passport';
 
 passport.use(new LocalStrategy({
   usernameField: 'email', 
@@ -24,3 +25,6 @@ passport.use(new LocalStrategy({
     return done(error);
   }
 }));
+
+passport.serializeUser((user, done) => done(null, user));
+passport.deserializeUser((user, done) => done(null, user));
