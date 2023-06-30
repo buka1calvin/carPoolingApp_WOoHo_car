@@ -1,10 +1,11 @@
 import User from "../models/user";
-import { registerUser } from "../service/user.service";
+import { registerUser, findUserById, findUserByEmail } from "../service/user.service";
 import { BcryptUtil } from "../utils/bcrypt";
 import { generateToken } from "../utils/generateToken";
 import generateOTP from "../utils/generateOTP";
 import OTP from "../models/Otp";
 import validationOTPmail from "../service/emailValidation.service";
+import { logout } from "../service/user.service";
 
 export const createUser=async(req,res)=>{
     try{
@@ -96,3 +97,65 @@ export const loginUser=async(req,res,next)=>{
             return res.status(500).json({error:error.message})
           }
 }
+
+export const getUserProfile=async(req,res)=>{
+    try{
+    const userId=req.user.id
+
+    const user=await findUserById(userId)
+    if(user){
+      return  res.status(200).json({userDetails:user})
+    }
+    }
+    catch(error){
+        res.status(500).json(error.message)
+    }
+}
+
+export const editUserProfile = async (req, res) => {
+    try {
+      const userEmail = req.user.email;
+      const decodeUser = await findUserByEmail(userEmail);
+  
+      if (!decodeUser) return res.status(401).json('user not found');
+      const billingAddress = {
+        province: req.body.province || '',
+        district: req.body.district || '',
+        street: req.body.street || '',
+        email: req.body.email || '',
+      };
+
+    const user = await User.findByIdAndUpdate(
+        decodeUser._id,
+        {
+          $set: {
+            userId: req.body.userId || decodeUser.userId,
+            dob: req.body.DOB || decodeUser.DOB,
+            gender: req.body.gender || decodeUser.gender,
+            preferredLanguage: req.body.preferredLanguage || decodeUser.preferredLanguage,
+            preferredCurrency: req.body.preferredCurrency || decodeUser.preferredCurrency,
+            billingAddress: billingAddress,
+            phoneNumber: req.body.phoneNumber || decodeUser.phoneNumber,
+            profilePic:req.file.path || decodeUser.profilePic
+          },
+        },
+        { new: true }
+      );
+
+      res.status(200).json({user:user,
+        message: 'User profile updated successfully' });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
+
+  export const logoutUser=async(req,res)=>{
+    try {
+      await logout(req.headers.authorization);
+      return res.status(200).json({
+        message: 'Successfully logged out.',
+      });
+    } catch (error) {
+      res.status(500).json({ message: error });
+    }
+  }

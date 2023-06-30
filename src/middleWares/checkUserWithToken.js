@@ -1,5 +1,6 @@
 import { verifyToken } from '../utils/generateToken';
-import {Blacklist} from "../database/models"
+import Blacklist from '../models/blacklist';
+import User from '../models/user';
 
 const extractToken = async (req, res, next) => {
   try {
@@ -7,14 +8,13 @@ const extractToken = async (req, res, next) => {
       return res.status(401).json({ status: 401, message: 'Please sign in' });
     }
     const token = req.header('Authorization').split(' ')[1];
-    const isTokenExist = await Blacklist.findOne({where: {token}})
+    const isTokenExist = await Blacklist.findOne({token})
 
     if(isTokenExist) return res.status(200).json({message: "Your session has expired, please login!"});
 
     const details = verifyToken(token);
-    const userExists = await User.findOne({
-      where: { email: details.data.email },
-    });
+    const userExists = await User.findOne({ email: details.data.email});
+    // console.log("+++++",userExists)
     if (!userExists) {
       return res.status(401).json({ status: 401, message: 'User not found!' });
     }
