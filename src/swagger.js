@@ -1,12 +1,21 @@
 import 'dotenv/config';
+import { 
+  signUp,
+  loginUser ,
+  getUserProfile,
+  userProfile,
+  verifyOTP,
+  logoutUser
+ } from './documents/user.doc';
+ import { updateUserStatus,assignUserRole } from './documents/admin.doc';
 
 export const swaggerDocument = {
   openapi: '3.0.1',
   info: {
     version: '1.0.0',
-    title: 'Destructors APIs Document',
+    title: 'WOoHoo_car APIs Document',
     description:
-      'This a simple api for mastering about back-end which will do an ecommerce server',
+      'This an aoi  for testing my back-end which will do serve as my carpooling server',
     termsOfService: '',
     contact: {
       name: 'WOoHoo_Car',
@@ -40,6 +49,22 @@ export const swaggerDocument = {
     },
     '/api/v1/users/login': {
       post: loginUser,
+    },
+    '/api/v1/users/logout': {
+      post: logoutUser,
+    },
+    '/api/v1/users/profile': {
+      get: getUserProfile,
+      put: userProfile,
+    },
+    '/api/v1/users/login/validate/{token}': {
+      post: verifyOTP,
+    },
+    '/api/v1/users/{id}/status': {
+      patch: updateUserStatus,
+    },
+    '/api/v1/users/{id}/roles': {
+      patch: assignUserRole,
     },
   },
 };

@@ -6,14 +6,20 @@ import userExist from "../../middleWares/userCheck";
 import userValidation from "../../validations/login.validation";
 import verifyOtp from "../../middleWares/verifyOTP";
 import { assignUserRole,updateUserStatus } from "../../controllers/admin.controller";
-import { googleAuthentication, googleCallBack } from '../../controllers/googleCallBack'
+import { googleAuthentication, googleCallBack } from '../../controllers/googleCallBack';
+import { getUserProfile, editUserProfile } from "../../controllers/user.controler";
+import extractToken from "../../middleWares/checkUserWithToken";
+import upload from "../../config/multer";
+import { editUserProfil } from "../../validations/user.validations";
+import { otpValidation } from "../../validations/OTP.validation";
+import { logoutUser } from "../../controllers/user.controler";
 
 
 const router=Router();
 
 router.post('/signUp',signupValidation,userExist,createUser)
 router.post('/login',userValidation,loginUser)
-router.post('/login/validate/:token',verifyOtp)
+router.post('/login/validate/:token',otpValidation,verifyOtp)
 router.patch('/:id/roles',assignUserRole)
 router.patch('/:id/status',updateUserStatus)
 router.get('/auth',(req,res)=>{
@@ -29,5 +35,21 @@ router.get('/google/callback',
      failureRedirect: '/login' }),
      googleCallBack
 );
+
+router.get(
+'/profile',
+extractToken,
+editUserProfil,
+getUserProfile)
+
+router.put(
+  '/profile',
+  extractToken,
+  editUserProfil,
+  upload.single('profilePic'),
+  editUserProfile
+);
+
+router.post('/logout', extractToken, logoutUser);
 
 export default router;
