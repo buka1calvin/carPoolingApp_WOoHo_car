@@ -1,5 +1,5 @@
-import sgMail from '@sendgrid/mail';
-import 'dotenv/config';
+import sgMail from "@sendgrid/mail";
+import "dotenv/config";
 
 const validationOTPmail = async (user, otp, token) => {
   const apikey = process.env.API_KEY;
@@ -8,11 +8,11 @@ const validationOTPmail = async (user, otp, token) => {
   const message = {
     to: user.email,
     from: {
-      name: 'WOoHo_Car',
+      name: "WOoHo_Car",
       email: process.env.SEND_EMAIL,
     },
-    subject: 'Click here to confirm',
-    text: 'This is the message from SendGrid',
+    subject: "Click here to confirm",
+    text: "This is the message from SendGrid",
     html: `
       <html>
         <head>
@@ -64,9 +64,74 @@ const validationOTPmail = async (user, otp, token) => {
   sgMail
     .send(message)
     .then((res) => {
-      console.log('Message sent...');
+      console.log("Message sent...");
     })
     .catch((error) => console.log(error));
 };
 
-export default validationOTPmail;
+const sendDriverProfileUpdateEmail = async (user, driverData) => {
+  const url = `${process.env.VERIFY_EMAIL}/verification/${user._id}`;
+  const apikey = process.env.API_KEY;
+  sgMail.setApiKey(apikey);
+  const { driverLicenseNumber, carPictures } = driverData;
+
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <style>
+        /* Your CSS styles here */
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <h2>Driver Profile Update Request</h2>
+        <table>
+          <tr>
+            <th>Field</th>
+            <th>Value</th>
+          </tr>
+          <tr>
+          <td>names</td>
+          <td>${user.firstname} ${user.lastname}</td>
+        </tr>
+          <tr>
+            <td>Driver License Number:</td>
+            <td>${driverLicenseNumber}</td>
+          </tr>
+          <tr>
+            <td>Car Pictures:</td>
+            <td>
+              <ul>
+                ${carPictures
+                  .map((picture) => `<li><img src="${picture}"/></li>`)
+                  .join("")}
+              </ul>
+            </td>
+          </tr>
+        </table>
+        <button><a href=${url}> verify </a></button>
+      </div>
+    </body>
+    </html>
+  `;
+
+  const msg = {
+    to: "calvinusbukaran@gmail.com",
+    from: {
+      name: `${user.firstname}  ${user.lastname}`,
+      email: process.env.SEND_EMAIL,
+    },
+    subject: "Driver Profile Update Request",
+    html: htmlContent,
+  };
+
+  try {
+    await sgMail.send(msg);
+    console.log("Driver profile update email sent");
+  } catch (error) {
+    console.error("Error sending driver profile update email:", error);
+  }
+};
+
+export { validationOTPmail, sendDriverProfileUpdateEmail };
