@@ -61,6 +61,19 @@ const userSchema = new mongoose.Schema({
       ref: 'Review',
     },
   ],
+  driverLicenseNumber: {
+    type: String,
+    default: null,
+  },
+  carPictures: {
+    type: [String],
+    default: [],
+  },
+  verificationStatus: {
+    type: String,
+    enum: ['pending', 'approved', 'rejected'],
+    default: 'pending',
+  },
 }, { timestamps: true });
 
 
