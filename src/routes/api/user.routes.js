@@ -1,6 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
-import { createUser, loginUser } from "../../controllers/user.controler";
+import { createRide, createUser, loginUser } from "../../controllers/user.controler";
 import { signupValidation } from "../../validations/signUp.validation";
 import userExist from "../../middleWares/userCheck";
 import userValidation from "../../validations/login.validation";

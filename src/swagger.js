@@ -9,6 +9,7 @@ import {
  } from './documents/user.doc';
  import { updateUserStatus,assignUserRole } from './documents/admin.doc';
  import { updateDriverProfile, updateVerificationStatus } from './documents/driverProfile.doc';
+import { newRide } from './documents/ride.doc';
 
 export const swaggerDocument = {
   openapi: '3.0.1',
@@ -72,6 +73,9 @@ export const swaggerDocument = {
     },
     '/api/v1/users/verification/{id}': {
       patch: updateVerificationStatus,
+    },
+    '/api/v1/rides': {
+      post: newRide,
     },
   },
 };

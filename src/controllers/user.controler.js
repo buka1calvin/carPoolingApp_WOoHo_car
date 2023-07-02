@@ -8,9 +8,10 @@ import { BcryptUtil } from "../utils/bcrypt";
 import { generateToken } from "../utils/generateToken";
 import generateOTP from "../utils/generateOTP";
 import OTP from "../models/Otp";
-import validationOTPmail from "../service/emailValidation.service";
+import { validationOTPmail } from "../service/emailValidation.service";
 import { logout } from "../service/user.service";
 import { sendDriverProfileUpdateEmail } from "../service/emailValidation.service";
+
 
 export const createUser = async (req, res) => {
   try {
