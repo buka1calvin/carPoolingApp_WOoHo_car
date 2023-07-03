@@ -80,13 +80,13 @@ export const swaggerDocument = {
     '/api/v1/rides': {
       post: newRide,
     },
-    '/api/v1/user/verify-email': {
+    '/api/v1/users/verify-email': {
       get: verifyEmail,
     },
-    '/api/v1/user/reset-password/:token': {
+    '/api/v1/users/reset-password/{token}': {
       patch: ResetPassword,
     },
-    '/api/v1/user/reset-password': {
+    '/api/v1/users/reset-password': {
       post: resetEmail,
     }
   },
