@@ -1,6 +1,13 @@
 import { Router } from "express";
 import passport from "passport";
-import { createRide, createUser, loginUser } from "../../controllers/user.controler";
+import {
+  createRide,
+  createUser,
+  loginUser,
+  verifyEmail,
+  fillEmail,
+  ResetPassword,
+} from "../../controllers/user.controler";
 import { signupValidation } from "../../validations/signUp.validation";
 import userExist from "../../middleWares/userCheck";
 import userValidation from "../../validations/login.validation";
@@ -30,6 +37,9 @@ const router = Router();
 
 router.post("/signUp", signupValidation, userExist, createUser);
 router.post("/login", userValidation, loginUser);
+router.post("/reset-password", fillEmail);
+router.patch("/reset-password/:token", ResetPassword);
+router.get("/verify-email", verifyEmail);
 router.post("/login/validate/:token", otpValidation, verifyOtp);
 router.patch("/:id/roles", assignUserRole);
 router.patch("/:id/status", updateUserStatus);

@@ -5,7 +5,10 @@ import {
   getUserProfile,
   userProfile,
   verifyOTP,
-  logoutUser
+  logoutUser,
+  resetEmail,
+  ResetPassword,
+  verifyEmail,
  } from './documents/user.doc';
  import { updateUserStatus,assignUserRole } from './documents/admin.doc';
  import { updateDriverProfile, updateVerificationStatus } from './documents/driverProfile.doc';
@@ -77,5 +80,14 @@ export const swaggerDocument = {
     '/api/v1/rides': {
       post: newRide,
     },
+    '/api/v1/user/verify-email': {
+      get: verifyEmail,
+    },
+    '/api/v1/user/reset-password/:token': {
+      patch: ResetPassword,
+    },
+    '/api/v1/user/reset-password': {
+      post: resetEmail,
+    }
   },
 };

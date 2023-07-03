@@ -12,6 +12,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     unique: true,
   },
+  isEmailVerified: {
+    type: Boolean,
+    default: false
+  },
   role: {
     type: String,
     default: 'passenger',
