@@ -1,6 +1,7 @@
 import User from "../models/user";
 import { BcryptUtil } from "../utils/bcrypt"
 import Blacklist from "../models/blacklist";
+import Jwt from 'jsonwebtoken';
 
 export const registerUser=async(data)=>{
     const {firstname,lastname,email,role,phoneNumber,password,isActive}=data;
@@ -18,6 +19,17 @@ export const registerUser=async(data)=>{
     return newUser
 }
 
+const checkToken = (token, env) => {
+    const payload = Jwt.verify(token, env, (error, decodedToken) => {
+      if (error) {
+        return error;
+      }
+      return decodedToken;
+    });
+  
+    return payload;
+  };
+export default checkToken;
 export const findUserById=async(id)=>{
     const user=await User.findById({_id:id})
     if(user){
