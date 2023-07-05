@@ -6,7 +6,9 @@ const blacklistSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-});
+},
+{ timestamps: true }
+);
 
 const Blacklist = mongoose.model('Blacklist', blacklistSchema);
 

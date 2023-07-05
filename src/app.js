@@ -5,10 +5,8 @@ import 'dotenv/config';
 import passport from 'passport';
 import session from 'express-session';
 import swaggerUi from 'swagger-ui-express';
-import PassportLocal from 'passport-local'
 import morgan from 'morgan';
 import bodyParser from 'body-parser'
-import User from './models/user';
 import allRoutes from './routes/index'
 import adminSeeder from './seeders/adminSeeder';
 import { swaggerDocument } from './swagger';
@@ -40,9 +38,5 @@ mongoose.connect(process.env.DEV_DATABASE,{   useNewUrlParser: true,
   } catch (error) {
     console.log(error);
   }
-  // const LocalStrategy = PassportLocal.Strategy;
-  // passport.use(new LocalStrategy(User.authenticate()));
-  // passport.serializeUser(User.serializeUser());
-  // passport.deserializeUser(User.deserializeUser());
 
 export default app;
