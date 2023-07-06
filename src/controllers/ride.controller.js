@@ -77,3 +77,33 @@ export const createBooking = async (req, res) => {
 };
 
 
+  export const searchRide = async (req, res) => {
+    const { origin, destination, date = new Date().toISOString().split('T')[0], seats } = req.query;
+    const startDate = new Date(date);
+    const endDate = new Date(date);
+    endDate.setDate(endDate.getDate() + 1);
+  
+    const filter = {
+      origin,
+      destination,
+      departureDate: { $gte: startDate, $lt: endDate }
+    };
+  
+    if(seats) {
+      filter.seats = { $gte: parseInt(seats) };
+    }
+  
+    try {
+      const cars = await Ride.find(filter);
+      if (cars.length === 0) {
+        return res.status(404).json({ message: "Ride not available!" });
+      }
+      return res.status(200).json(cars);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ error: "An error occurred while searching for a ride!" });
+    }
+  };
+  
+  
+  

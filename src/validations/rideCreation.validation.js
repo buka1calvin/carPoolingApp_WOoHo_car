@@ -20,3 +20,23 @@ export const rideValidation = async (req, res, next) => {
   }
   next();
 };
+
+const searchValidationSchema = Joi.object({
+  origin: Joi.string().required(),
+  destination: Joi.string().required(),
+  seats: Joi.number(),
+  date: Joi.date()
+})
+console.log(new Date().toISOString())
+export const searchValidation = async (req, res, next) => {
+  const { error } = searchValidationSchema.validate(req.body, {
+    abortEarly: false,
+  });
+  if (error) {
+    return res.status(400).json({
+      error: error.details[0].message.replace(/[^a-zA-Z0-9 ]/g, ''),
+    });
+  }
+  next();
+};
+
