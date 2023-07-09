@@ -13,6 +13,7 @@ import {
  import { updateUserStatus,assignUserRole } from './documents/admin.doc';
  import { updateDriverProfile, updateVerificationStatus } from './documents/driverProfile.doc';
 import { newRide } from './documents/ride.doc';
+import { createBooking,approveBooking } from './documents/booking.doc';
 
 export const swaggerDocument = {
   openapi: '3.0.1',
@@ -88,6 +89,12 @@ export const swaggerDocument = {
     },
     '/api/v1/users/reset-password': {
       post: resetEmail,
+    },
+    '/api/v1/rides/{_id}/bookings': {
+      post: createBooking,
+    },
+    '/api/v1/bookings/{_id}/approve': {
+      patch:approveBooking,
     }
   },
 };
