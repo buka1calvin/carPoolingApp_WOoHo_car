@@ -1,6 +1,8 @@
 import { createNewRide } from "../service/ride.service";
 import Booking from "../models/Booking";
 import Ride from "../models/Ride";
+import Blacklist from "../models/blacklist";
+import { verifyToken } from "../utils/generateToken";
 
 export const createRide = async (req, res) => {
   try {
@@ -76,4 +78,33 @@ export const createBooking = async (req, res) => {
   }
 };
 
+export const getRide = async (req, res) => {
+  try {
+    if (!req.header("Authorization")) {
+      return res.status(401).json({ status: 401, message: "Please sign in" });
+    }
 
+    const token = req.header("Authorization").split(' ')[1];
+    const isTokenExist = await Blacklist.findOne({ token });
+    if (isTokenExist) {
+      return res.status(200).json({ message: "Your session has expired, please login!" });
+    }
+    const details = verifyToken(token);
+
+    if (details.data.role === 'admin') {
+      const rides = await Ride.find();
+      return res.status(200).send(rides);
+    }
+
+    if (details.data.role === 'driver') {
+      const rides = await Ride.find({
+        driverId: details.data.id
+      });
+      return res.status(200).send(rides);
+    }
+    return res.status(403).json({ message: "Forbidden" });
+  } catch (error) {
+    console.log('Error:', error);
+    res.status(500).json({ error: error });
+  }
+};
