@@ -18,7 +18,8 @@ const adminSeeder=async()=>{
           lastname:"1",
           email:'calvinusbukaran@gmail.com',
           role: 'admin',
-          phoneNumber:'+250786639348'
+          phoneNumber:'+250786639348',
+          isEmailVerified: true
           // Set other admin user properties as needed
         };
     
