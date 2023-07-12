@@ -32,10 +32,13 @@ import { logoutUser } from "../../controllers/user.controler";
 import { updateDriverProfile } from "../../controllers/user.controler";
 import { uploadArray } from "../../middleWares/driver.middleware";
 import { updateVerificationStatus } from "../../controllers/user.controler";
+import { userPayment } from "../../controllers/payment.controller";
+import { createBooking } from "../../controllers/ride.controller";
 
 const router = Router();
 
 router.post("/signUp", signupValidation, userExist, createUser);
+router.post('/payment',extractToken,  userPayment);
 router.post("/login", userValidation, loginUser);
 router.post("/reset-password", fillEmail);
 router.patch("/reset-password/:token", ResetPassword);
