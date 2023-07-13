@@ -47,6 +47,14 @@ export const findUserByEmail = async (email) => {
     }
     return UserInfo;
   };
+  export const findAllUsers = async (userId) => {
+    const users = await User.find({ _id: { $ne: userId } });
+    if (users) {
+      return users;
+    }
+    return false;
+  };
+  
 export const logout = async (userData) => {
     const token = userData.split(' ')[1];
     await Blacklist.create({ token });

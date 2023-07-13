@@ -3,6 +3,7 @@ import {
   registerUser,
   findUserById,
   findUserByEmail,
+  findAllUsers
 } from "../service/user.service";
 import { BcryptUtil } from "../utils/bcrypt";
 import { generateToken } from "../utils/generateToken";
@@ -407,3 +408,15 @@ export const logoutUser = async (req, res) => {
     res.status(500).json({ message: error });
   }
 };
+export const getAllUsers=async(req,res)=>{
+  try{
+    const user=req.user._id
+    if(user){
+  const AllUsers=await findAllUsers(user)
+  res.status(200).json({users:AllUsers})
+    }
+  }
+  catch(error){
+    res.status(500).json(error.message)
+  }
+}

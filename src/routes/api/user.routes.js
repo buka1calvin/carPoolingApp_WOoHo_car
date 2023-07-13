@@ -7,6 +7,7 @@ import {
   verifyEmail,
   fillEmail,
   ResetPassword,
+  getAllUsers
 } from "../../controllers/user.controler";
 import { signupValidation } from "../../validations/signUp.validation";
 import userExist from "../../middleWares/userCheck";
@@ -77,5 +78,6 @@ router.patch(
 router.patch("/verification/:id", extractToken, updateVerificationStatus);
 
 router.post("/logout", extractToken, logoutUser);
+router.get('/',extractToken,getAllUsers)
 
 export default router;
